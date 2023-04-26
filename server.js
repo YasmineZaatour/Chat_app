@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+const { userSchema } = require("./schema");
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 const messages = [];
@@ -19,17 +20,12 @@ connect();
   console.log("Listening on port 8000");
 });*/
 // Define a user schema for MongoDB
-const userSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
-});
 
 // Define a User model using the user schema
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 // Define a route to handle user registration form submission
-app.post('/register', (req, res) => {
+app.post("/register", (req, res) => {
   // Create a new user object from the submitted form data
   const newUser = new User({
     username: req.body.username,
@@ -40,14 +36,12 @@ app.post('/register', (req, res) => {
   newUser.save((err) => {
     if (err) {
       console.log(err);
-      res.status(500).send('Error creating new user');
+      res.status(500).send("Error creating new user");
     } else {
-      res.status(200).send('User created successfully');
+      res.status(200).send("User created successfully");
     }
   });
 });
-
-
 
 app.use(express.static(__dirname + "/public"));
 
